@@ -1,5 +1,7 @@
 <template>
-  <default-view />
+  <v-app>
+    <default-view />
+  </v-app>
 </template>
 
 <script setup>
