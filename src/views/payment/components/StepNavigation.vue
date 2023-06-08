@@ -1,9 +1,9 @@
 <script setup>
 const props = defineProps({
   steps: {
-    type: Array,
+    type: Object,
     required: true,
-    default: () => [],
+    default: () => {},
   },
   paymentStatus: {
     type: String,
@@ -21,9 +21,9 @@ const props = defineProps({
       :style="{ bottom: '-55px', position: 'relative', zIndex: 999 }"
     >
       <div
-        v-for="(step, index) in props.steps"
-        :key="step"
-        class="justify-space-around align-center pa-3"
+        v-for="(step, key, index) in props.steps"
+        :key="key"
+        class="justify-space-around align-center pa-5"
       >
         <div
           class="text-h6 d-flex align-center"
@@ -36,19 +36,19 @@ const props = defineProps({
               size="30"
               class="mr-2"
               :color="
-                paymentStatus == step
+                paymentStatus == key
                   ? 'primary elevation-1'
                   : 'rgba(255, 138, 0, 0.2)'
               "
-              :class="paymentStatus == step ? 'text-white' : 'text-primary'"
+              :class="paymentStatus == key ? 'text-white' : 'text-primary'"
             >
               <span> {{ index + 1 }}</span>
             </v-avatar>
             <span class="text-primary font-weight-regular">
-              {{ step }}
+              {{ key }}
             </span>
           </div>
-          <v-icon v-if="index < steps.length - 1" color="primary">
+          <v-icon v-if="index < Object.keys(steps).length - 1" color="primary">
             mdi-chevron-right
           </v-icon>
         </div>

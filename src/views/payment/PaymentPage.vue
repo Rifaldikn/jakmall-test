@@ -1,31 +1,37 @@
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useDisplay } from "vuetify";
 import { toCurrency } from "@/helpers/filters";
+import { usePaymentStore } from "./Payment.store";
 
 import StepNavigation from "./components/StepNavigation.vue";
+import DeliveryStep from "./components/DeliveryStep.vue";
+import PaymentStep from "./components/PaymentStep.vue";
+import FinishStep from "./components/FinishStep.vue";
 
+const store = usePaymentStore();
 const { mdAndUp } = useDisplay();
 
-const paymentSteps = ["Delivery", "Payment", "Finish"];
-const dropShippingFee = 5900;
-const productPrice = 50000;
+const paymentSteps = {
+  Delivery: DeliveryStep,
+  Payment: PaymentStep,
+  Finish: FinishStep,
+};
 
-const paymentStatus = ref("Delivery");
-const isDropshipper = ref(false);
-const productCount = ref(10);
-
-const productCost = computed(() => productCount.value * productPrice);
-const totalCost = computed(
-  () => productCost.value + (isDropshipper.value ? dropShippingFee : 0)
-);
+const currentStepComponent = computed(() => {
+  const status = store.paymentStatus;
+  return paymentSteps[status];
+});
 </script>
 
 <template>
   <v-container fluid class="fill-height" style="background-color: #fffae6">
     <v-row class="fill-height align-center justify-center pa-10">
       <v-col class="12">
-        <StepNavigation :steps="paymentSteps" :payment-status="paymentStatus" />
+        <StepNavigation
+          :steps="paymentSteps"
+          :payment-status="store.paymentStatus"
+        />
         <v-row class="justify-center">
           <v-col cols="12" class="d-flex justify-center">
             <v-card
@@ -49,50 +55,17 @@ const totalCost = computed(
                     Back to cart
                   </v-btn>
                 </v-col>
+
+                <!-- Right Section Step Content -->
                 <v-col cols="9">
-                  <v-row>
-                    <v-col cols="auto">
-                      <h4 class="text-h4 font-weight-bold text-primary">
-                        <span
-                          class="card_title"
-                          :style="{
-                            // 'box-shadow': `inset 0px -8px 0px rgba(238, 238, 238, 1)`,
-                          }"
-                          >Delivery Details
-                          <v-divider
-                            thickness="8px"
-                            length="300px"
-                            color="grey"
-                            :style="{
-                              position: 'relative',
-                              top: '-12px',
-                            }"
-                          ></v-divider>
-                        </span>
-                      </h4>
-                    </v-col>
-                    <v-spacer></v-spacer>
-                    <v-col>
-                      <v-checkbox
-                        class="text-success"
-                        v-model="isDropshipper"
-                        color="success"
-                        density="compact"
-                        single-line
-                        hide-details
-                      >
-                        <template #label>
-                          <div class="text-black font-weight-medium">
-                            Send as dropshipper
-                          </div>
-                        </template>
-                      </v-checkbox>
-                    </v-col>
-                  </v-row>
+                  <keep-alive>
+                    <component :is="currentStepComponent"></component>
+                  </keep-alive>
                 </v-col>
 
                 <v-divider thickness="1px" color="primary" vertical></v-divider>
 
+                <!-- Right Section Summary Orders -->
                 <v-col cols="3">
                   <v-row>
                     <v-col cols="12">
@@ -103,7 +76,7 @@ const totalCost = computed(
                       <div
                         class="text-subtitle-2 font-weight-regular text-grey"
                       >
-                        {{ productCount }} items purchased
+                        {{ store.productCount }} items purchased
                       </div>
                     </v-col>
                   </v-row>
@@ -120,7 +93,7 @@ const totalCost = computed(
                       <div class="font-weight-bold text-black">
                         {{
                           toCurrency({
-                            value: productCost,
+                            value: store.productCost,
                             locales: "en-US",
                             style: "decimal",
                           })
@@ -132,7 +105,9 @@ const totalCost = computed(
                       <div class="font-weight-bold text-black">
                         {{
                           toCurrency({
-                            value: dropShippingFee,
+                            value: store.isDropshipper
+                              ? store.dropShippingFee
+                              : 0,
                             locales: "en-US",
                             style: "decimal",
                           })
@@ -148,7 +123,7 @@ const totalCost = computed(
                       <div>
                         {{
                           toCurrency({
-                            value: totalCost,
+                            value: store.totalCost,
                             locales: "en-US",
                             style: "decimal",
                           })
