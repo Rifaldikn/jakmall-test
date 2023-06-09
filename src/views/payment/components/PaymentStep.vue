@@ -7,7 +7,6 @@ import SelectionCard from "@/components/SelectionCard.vue";
 
 const store = usePaymentStore();
 </script>
-
 <template>
   <v-row>
     <v-col cols="12">

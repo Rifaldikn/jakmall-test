@@ -10,6 +10,10 @@ defineProps({
     type: String,
     required: true,
   },
+  disabledBtn: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
@@ -59,7 +63,10 @@ defineProps({
         "
       >
         <div>
-          <span class="font-weight-bold text-subtitle-2">{{ store.shipment }} </span> shipment
+          <span class="font-weight-bold text-subtitle-2"
+            >{{ store.shipment }}
+          </span>
+          shipment
         </div>
         <div class="font-weight-bold text-black">
           {{
@@ -96,6 +103,7 @@ defineProps({
           variant="flat"
           class="text-capitalize font-weight-medium"
           size="large"
+          :disabled="disabledBtn"
           block
           @click="$emit('onClickAction')"
           >{{ actionTitle }}

@@ -1,15 +1,17 @@
 <script setup>
 import { ref } from "vue";
 import { usePaymentStore } from "../Payment.store";
-import { required, phoneNumber } from "@/helpers/inputRules";
+import { required, phoneNumber, email } from "@/helpers/inputRules";
 
 import CardTitle from "@/components/CardTitle.vue";
 import ValidationIcon from "@/components/ValidationIcon.vue";
+import { watch } from "vue";
+import { computed } from "vue";
 
 const store = usePaymentStore();
 
 const rules = {
-  name: [required],
+  email: [required, email],
   phoneNumber: [required, phoneNumber],
   deliveryAddress: [required],
   dropshipperName: [required],
@@ -27,6 +29,16 @@ const clearDropshipperData = () => {
 const getFieldStatus = (key, items) => {
   return items.value.find(({ id }) => id == key)?.isValid;
 };
+
+const isDeliveryFormValid = computed(() => {
+  if (!store.isDropshipper) return formValid.value;
+
+  return formValid.value && dropshipperFormValid.value;
+});
+
+watch(isDeliveryFormValid, (newVal) => {
+  store.stepValidation.Delivery = newVal;
+});
 </script>
 
 <template>
@@ -54,12 +66,12 @@ const getFieldStatus = (key, items) => {
       <v-form v-model="formValid" validate-on="input">
         <template #default="{ items }">
           <v-text-field
-            label="Name"
-            name="name"
-            v-model="store.user.name"
+            label="Email"
+            name="email"
+            v-model="store.user.email"
             variant="outlined"
             class="mb-3"
-            :rules="rules.name"
+            :rules="rules.email"
           >
             <template #append-inner>
               <ValidationIcon :status="getFieldStatus('name', items)" />
@@ -109,7 +121,7 @@ const getFieldStatus = (key, items) => {
             v-model="store.user.dropshipperName"
             variant="outlined"
             :disabled="!store.isDropshipper"
-            :rules="rules.name"
+            :rules="rules.dropshipperName"
           >
             <template #append-inner>
               <ValidationIcon

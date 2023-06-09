@@ -47,6 +47,14 @@ const getNextStepButtonTitle = computed(() => {
 
   return false;
 });
+
+const isBtnActionDisabled = computed(() => {
+  const status = store.paymentStatus;
+
+  if (status == "Delivery") return !store.stepValidation[status];
+
+  return false;
+});
 </script>
 
 <template>
@@ -103,7 +111,12 @@ const getNextStepButtonTitle = computed(() => {
 
                   <SummaryPrice
                     :action-title="getNextStepButtonTitle ?? false"
-                    @on-click-action="store.SET_PaymentStatus(getRoute(1))"
+                    :disabled-btn="isBtnActionDisabled"
+                    @on-click-action="
+                      store.SET_PaymentStatus(getRoute(1));
+
+                      if (store.paymentStatus == 'Finish') store.SET_OrderId();
+                    "
                   >
                   </SummaryPrice>
                 </v-col>

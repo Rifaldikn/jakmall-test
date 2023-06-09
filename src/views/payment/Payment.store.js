@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 
+import { generateAlphanumeric } from "@/helpers/utils";
+import { ALLOWED_CHAR, ID_LENGTH } from "@/helpers/variables";
+
 const shipmentMethods = {
   "Go-Send": {
     price: 15000,
@@ -18,15 +21,18 @@ const shipmentMethods = {
 const paymentMethods = ["e-Wallet", "Bank Transfer", "Virtual Acccount"];
 
 export const usePaymentStore = defineStore("payment", {
+  presist: true,
+
   state: () => {
     return {
+      orderId: "",
       paymentStatus: "Delivery",
       productCount: 10,
       dropShippingFee: 5900,
       productPrice: 50000,
       isDropshipper: false,
       user: {
-        name: "",
+        email: "",
         phoneNumber: "",
         dropshipName: "",
         deliveryAddress: "",
@@ -36,8 +42,8 @@ export const usePaymentStore = defineStore("payment", {
       payment: "e-Wallet",
       shipment: "Go-Send",
       stepValidation: {
-        delivery: false,
-        payment: false,
+        Delivery: false,
+        Payment: false,
       },
       eWallet: {
         balance: 1500000,
@@ -67,8 +73,6 @@ export const usePaymentStore = defineStore("payment", {
       return total;
     },
 
-
-
     shipmentMethods() {
       return shipmentMethods;
     },
@@ -80,6 +84,12 @@ export const usePaymentStore = defineStore("payment", {
   actions: {
     SET_PaymentStatus(status) {
       this.paymentStatus = status;
+    },
+    SET_OrderId() {
+      this.orderId = generateAlphanumeric(
+        ID_LENGTH,
+        ALLOWED_CHAR
+      ).toUpperCase();
     },
   },
 });
