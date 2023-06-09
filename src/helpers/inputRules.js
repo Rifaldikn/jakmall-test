@@ -17,6 +17,9 @@ const email = (v, msg = "E-mail should be valid") => /.+@.+\..+/.test(v) || msg;
 
 const samePass = (v1, v2, msg = "Password not match") => v1 === v2 || msg;
 
+const phoneNumber = (v, msg = "Phone number should be valid") =>
+  /^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/.test(v) || msg;
+
 export {
   required,
   objectRequired,
@@ -26,4 +29,5 @@ export {
   maxLength,
   email,
   samePass,
+  phoneNumber,
 };
