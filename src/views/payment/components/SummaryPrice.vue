@@ -19,7 +19,7 @@ defineProps({
       dense
       class="text-subtitle-2 font-weight-regular text-grey"
       :style="{
-        marginTop: '100%',
+        marginTop: '30%',
       }"
     >
       <!-- Total Product Cost -->
@@ -59,12 +59,12 @@ defineProps({
         "
       >
         <div>
-          <span>{{ store.shipmentMethod }} </span>shipment
+          <span class="font-weight-bold text-subtitle-2">{{ store.shipment }} </span> shipment
         </div>
         <div class="font-weight-bold text-black">
           {{
             toCurrency({
-              value: store.isDropshipper ? store.dropShippingFee : 0,
+              value: store.shipmentMethods[store.shipment].price,
               locales: "en-US",
               style: "decimal",
             })

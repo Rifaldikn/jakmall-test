@@ -9,6 +9,7 @@ import PaymentStep from "./components/PaymentStep.vue";
 import FinishStep from "./components/FinishStep.vue";
 import SummaryPrice from "./components/SummaryPrice.vue";
 import SummaryProduct from "./components/SummaryProduct.vue";
+import SummaryDelivery from "./components/SummaryDelivery.vue";
 
 const store = usePaymentStore();
 const { mdAndUp } = useDisplay();
@@ -96,9 +97,12 @@ const getNextStepButtonTitle = computed(() => {
                 <!-- Right Section Summary Orders -->
                 <v-col cols="3">
                   <SummaryProduct></SummaryProduct>
+                  <v-divider class="my-5" style="max-width: 50%"></v-divider>
+
+                  <SummaryDelivery />
 
                   <SummaryPrice
-                    :action-title="getNextStepButtonTitle"
+                    :action-title="getNextStepButtonTitle ?? false"
                     @on-click-action="store.SET_PaymentStatus(getRoute(1))"
                   >
                   </SummaryPrice>

@@ -56,10 +56,19 @@ export const usePaymentStore = defineStore("payment", {
       return shipmentMethods[state.shipment] ?? 0;
     },
     totalCost(state) {
-      return (
-        this.productCost + (state.isDropshipper ? state.dropShippingFee : 0)
-      );
+      const product = this.productCost;
+      const dropship = state.isDropshipper ? state.dropShippingFee : 0;
+      const shipment =
+        this.paymentStatus == "Payment"
+          ? this.shipmentMethods[state.shipment].price
+          : 0;
+
+      const total = product + dropship + shipment;
+      return total;
     },
+
+
+
     shipmentMethods() {
       return shipmentMethods;
     },
