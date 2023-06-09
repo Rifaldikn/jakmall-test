@@ -94,16 +94,21 @@ const isBtnActionDisabled = computed(() => {
                 </v-col>
 
                 <!-- Right Section Step Content -->
-                <v-col cols="9">
+                <v-col cols="12" md="9">
                   <keep-alive>
                     <component :is="currentStepComponent"></component>
                   </keep-alive>
                 </v-col>
 
-                <v-divider thickness="1px" color="primary" vertical></v-divider>
+                <v-divider
+                  thickness="1px"
+                  color="primary"
+                  :horizontal="$vuetify.display.smAndUp"
+                  :vertical="$vuetify.display.mdAndUp"
+                ></v-divider>
 
                 <!-- Right Section Summary Orders -->
-                <v-col cols="3">
+                <v-col cols="12" md="3">
                   <SummaryProduct></SummaryProduct>
                   <v-divider class="my-5" style="max-width: 50%"></v-divider>
 

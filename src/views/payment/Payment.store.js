@@ -21,8 +21,6 @@ const shipmentMethods = {
 const paymentMethods = ["e-Wallet", "Bank Transfer", "Virtual Acccount"];
 
 export const usePaymentStore = defineStore("payment", {
-  presist: true,
-
   state: () => {
     return {
       orderId: "",
@@ -50,6 +48,7 @@ export const usePaymentStore = defineStore("payment", {
       },
     };
   },
+  persist: true,
 
   getters: {
     userInfo(state) {

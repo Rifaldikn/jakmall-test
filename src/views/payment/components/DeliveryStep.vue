@@ -43,7 +43,7 @@ watch(isDeliveryFormValid, (newVal) => {
 
 <template>
   <v-row>
-    <v-col cols="6">
+    <v-col cols="12" md="6" >
       <CardTitle title="Delivery Details" />
     </v-col>
     <v-spacer></v-spacer>
